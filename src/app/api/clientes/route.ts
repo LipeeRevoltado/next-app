@@ -1,27 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import pool from '../../../../lib/db';
 
-export async function PUT(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get('id');
-  const { nome, telefone } = await request.json();
-
-  if (!id) {
-    return NextResponse.json({ error: 'ID não fornecido' }, { status: 400 });
-  }
-
-  await pool.query('UPDATE cliente SET nome = ?, telefone = ? WHERE id = ?', [nome, telefone, id]);
-  return NextResponse.json({ message: 'Cliente atualizado' });
+export async function GET() {
+  const [rows] = await pool.query('SELECT * FROM cliente ORDER BY id');
+  const clientes = rows.map((row: any) => ({
+    ...row,
+    id: Number(row.id),
+  }));
+  return NextResponse.json(clientes);
 }
 
-export async function DELETE(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get('id');
-
-  if (!id) {
-    return NextResponse.json({ error: 'ID não fornecido' }, { status: 400 });
-  }
-
-  await pool.query('DELETE FROM cliente WHERE id = ?', [id]);
-  return NextResponse.json({ message: 'Cliente deletado' });
+export async function POST(request: Request) {
+  const { nome, email, telefone } = await request.json();
+  await pool.query('INSERT INTO cliente (nome, email, telefone) VALUES (?, ?, ?)', [nome, email, telefone]);
+  return NextResponse.json({ message: 'Cliente cadastrado' });
 }
