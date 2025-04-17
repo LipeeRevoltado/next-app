@@ -1,23 +1,18 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+import pool from '../../../../lib/db';
 
-let listaClientes = [
-  { id: 1, nome: "João", idade: 25 },
-  { id: 2, nome: "Maria", idade: 30 },
-];
-
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  console.log("PARAMS =>", searchParams);
-
-  const nome = searchParams.get("nome");
-  console.log("PARAMS nome =>", nome);
-
-  return NextResponse.json(listaClientes, { status: 201 });
+export async function GET() {
+  try {
+    const [rows] = await pool.query('SELECT * FROM cliente ORDER BY id');
+    return NextResponse.json(rows);
+  } catch (error) {
+    console.error('Erro ao buscar clientes:', error);
+    return NextResponse.json([], { status: 500 }); // <- Retorna array vazio no erro
+  }
 }
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  console.log("BODY =>", body);
-
-  return NextResponse.json({ message: "Hello World" });
+  const { nome, email, telefone } = await request.json();
+  await pool.query('INSERT INTO cliente (nome, email, telefone) VALUES (?, ?, ?)', [nome, email, telefone]);
+  return NextResponse.json({ message: 'Cliente cadastrado' });
 }
