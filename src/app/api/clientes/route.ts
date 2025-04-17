@@ -1,17 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pool from '../../../../lib/db';
 
-type Context = {
-  params: { id: string };
-};
-
-export async function PUT(request: NextRequest, { params }: Context) {
+export async function PUT(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
   const { nome, telefone } = await request.json();
-  await pool.query('UPDATE cliente SET nome = ?, telefone = ? WHERE id = ?', [nome, telefone, params.id]);
+
+  if (!id) {
+    return NextResponse.json({ error: 'ID não fornecido' }, { status: 400 });
+  }
+
+  await pool.query('UPDATE cliente SET nome = ?, telefone = ? WHERE id = ?', [nome, telefone, id]);
   return NextResponse.json({ message: 'Cliente atualizado' });
 }
 
-export async function DELETE(request: NextRequest, { params }: Context) {
-  await pool.query('DELETE FROM cliente WHERE id = ?', [params.id]);
+export async function DELETE(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
+
+  if (!id) {
+    return NextResponse.json({ error: 'ID não fornecido' }, { status: 400 });
+  }
+
+  await pool.query('DELETE FROM cliente WHERE id = ?', [id]);
   return NextResponse.json({ message: 'Cliente deletado' });
 }

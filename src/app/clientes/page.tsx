@@ -16,9 +16,7 @@ export default function Clientes() {
   }, []);
 
   const excluirCliente = async (id: number) => {
-    await fetch(`/api/clientes/${id}`, {
-      method: "DELETE",
-    });
+    await fetch(`/api/clientes/${id}?id=${id}`, { method: 'DELETE' });
     setClientes(clientes.filter(c => c.id !== id));
   };
 
