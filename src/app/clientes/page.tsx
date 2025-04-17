@@ -1,66 +1,24 @@
-"use client";
+import { NextRequest, NextResponse } from 'next/server';
+import pool from '../../../lib/db';
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+function extractIdFromUrl(url: string): string | null {
+  const match = url.match(/\/api\/clientes\/(\d+)/);
+  return match ? match[1] : null;
+}
 
-export default function Clientes() {
-  const [clientes, setClientes] = useState<any[]>([]);
+export async function PUT(request: NextRequest) {
+  const id = extractIdFromUrl(request.url);
+  if (!id) return NextResponse.json({ error: 'ID não encontrado na URL' }, { status: 400 });
 
-  useEffect(() => {
-    fetch("/api/clientes")
-      .then(res => res.json())
-      .then(data => {
-        console.log("Dados recebidos:", data);
-        setClientes(data);
-      });
-  }, []);
+  const { nome, telefone } = await request.json();
+  await pool.query('UPDATE cliente SET nome = ?, telefone = ? WHERE id = ?', [nome, telefone, id]);
+  return NextResponse.json({ message: 'Cliente atualizado' });
+}
 
-  const excluirCliente = async (id: number) => {
-    await fetch(`/api/clientes/${id}?id=${id}`, { method: 'DELETE' });
-    setClientes(clientes.filter(c => c.id !== id));
-  };
+export async function DELETE(request: NextRequest) {
+  const id = extractIdFromUrl(request.url);
+  if (!id) return NextResponse.json({ error: 'ID não encontrado na URL' }, { status: 400 });
 
-  return (
-    <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-10">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Clientes</h1>
-          <Link href="/clientes/novo">
-            <button className="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 transition">
-              Novo Cliente
-            </button>
-          </Link>
-        </div>
-
-        {clientes.length === 0 ? (
-          <p className="text-gray-600">Nenhum cliente encontrado.</p>
-        ) : (
-          <ul className="space-y-4">
-            {clientes.map(cliente => (
-              <li key={cliente.id} className="bg-white p-6 rounded-xl shadow flex flex-col sm:flex-row sm:items-center justify-between">
-                <div className="space-y-1">
-                  <p className="text-xl font-semibold">{cliente.nome}</p>
-                  <p className="text-gray-600">{cliente.email}</p>
-                  <p className="text-gray-600">{cliente.telefone}</p>
-                </div>
-                <div className="flex space-x-3 mt-4 sm:mt-0">
-                  <Link href={`/clientes/${cliente.id}`}>
-                    <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
-                      Editar
-                    </button>
-                  </Link>
-                  <button
-                    onClick={() => excluirCliente(cliente.id)}
-                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-                  >
-                    Excluir
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
-  );
+  await pool.query('DELETE FROM cliente WHERE id = ?', [id]);
+  return NextResponse.json({ message: 'Cliente deletado' });
 }
