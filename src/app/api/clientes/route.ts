@@ -1,18 +1,15 @@
 import { NextResponse } from 'next/server';
 import pool from '../../../../lib/db';
 
-export async function GET() {
-  try {
-    const [rows] = await pool.query('SELECT * FROM cliente ORDER BY id');
-    return NextResponse.json(rows);
-  } catch (error) {
-    console.error('Erro ao buscar clientes:', error);
-    return NextResponse.json([], { status: 500 }); // <- Retorna array vazio no erro
-  }
+export async function PUT(request: Request, context: { params: { id: string } }) {
+  const { id } = context.params;
+  const { nome, telefone } = await request.json();
+  await pool.query('UPDATE cliente SET nome = ?, telefone = ? WHERE id = ?', [nome, telefone, id]);
+  return NextResponse.json({ message: 'Cliente atualizado' });
 }
 
-export async function POST(request: Request) {
-  const { nome, email, telefone } = await request.json();
-  await pool.query('INSERT INTO cliente (nome, email, telefone) VALUES (?, ?, ?)', [nome, email, telefone]);
-  return NextResponse.json({ message: 'Cliente cadastrado' });
+export async function DELETE(_: Request, context: { params: { id: string } }) {
+  const { id } = context.params;
+  await pool.query('DELETE FROM cliente WHERE id = ?', [id]);
+  return NextResponse.json({ message: 'Cliente deletado' });
 }
