@@ -3,13 +3,13 @@
 import { useState } from "react";
 
 export default function Clientes() {
-  const [cliente, setCliente] = useState({});
+  const [clientes, setClientes] = useState({});
 
-  console.log('CLIENTE')
+  console.log('LISTA DE CLIENTES');
 
   return (
     <div>
-      <h1>Tela de Clientes do Felipe</h1>
+      <h1>Lista de Clientes</h1>
     </div>
   );
 }
