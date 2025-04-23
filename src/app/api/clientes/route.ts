@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import pool from '../../../../lib/db';
 
 export async function GET() {
-  const [rows] = await pool.query('SELECT * FROM cliente ORDER BY id');
+  const [rows] = await pool.query('SELECT * FROM cliente ORDER BY id') as any[];
   console.log('ROWS =>', rows);
   const clientes = rows.map((row: any) => ({
     ...row,
