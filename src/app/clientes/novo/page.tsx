@@ -24,7 +24,7 @@ export default function NovoCliente() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Cadastrar Novo Cliente</h1>
+        <h1 className="text-gray-600 font-bold mb-6 text-center">Cadastrar Novo Cliente</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">Nome</label>
@@ -33,7 +33,7 @@ export default function NovoCliente() {
               value={nome}
               onChange={(e) => setNome(e.target.value)}
               required
-              className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
+              className="mt-1 block w-full border text-gray-600 rounded px-3 py-2"
             />
           </div>
 
@@ -44,7 +44,7 @@ export default function NovoCliente() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
+              className="mt-1 block w-full border text-gray-600 rounded px-3 py-2"
             />
           </div>
 
@@ -55,7 +55,7 @@ export default function NovoCliente() {
               value={telefone}
               onChange={(e) => setTelefone(e.target.value)}
               required
-              className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
+              className="mt-1 block w-full border text-gray-600 rounded px-3 py-2"
             />
           </div>
 

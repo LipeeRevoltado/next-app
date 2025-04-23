@@ -23,7 +23,7 @@ export default function Clientes() {
     <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-10">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Clientes</h1>
+          <h1 className="text-gray-600">Clientes</h1>
           <Link href="/clientes/novo">
             <button className="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 transition">
               Novo Cliente
@@ -38,7 +38,7 @@ export default function Clientes() {
             {clientes.map(cliente => (
               <li key={cliente.id} className="bg-white p-6 rounded-xl shadow flex flex-col sm:flex-row sm:items-center justify-between">
                 <div className="space-y-1">
-                  <p className="text-xl font-semibold">{cliente.nome}</p>
+                  <p className="text-gray-600">{cliente.nome}</p>
                   <p className="text-gray-600">{cliente.email}</p>
                   <p className="text-gray-600">{cliente.telefone}</p>
                 </div>

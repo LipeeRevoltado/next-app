@@ -3,6 +3,7 @@ import pool from '../../../../lib/db';
 
 export async function GET() {
   const [rows] = await pool.query('SELECT * FROM cliente ORDER BY id');
+  console.log('ROWS =>', rows);
   const clientes = rows.map((row: any) => ({
     ...row,
     id: Number(row.id),
