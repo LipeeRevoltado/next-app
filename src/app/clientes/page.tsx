@@ -38,9 +38,9 @@ export default function Clientes() {
             {clientes.map(cliente => (
               <li key={cliente.id} className="bg-white p-6 rounded-xl shadow flex flex-col sm:flex-row sm:items-center justify-between">
                 <div className="space-y-1">
-                  <p className="text-gray-600">{cliente.nome}</p>
+                  <p className="text-gray-600">{cliente.name}</p>
+                  <p className="text-gray-600">{cliente.phone}</p>
                   <p className="text-gray-600">{cliente.email}</p>
-                  <p className="text-gray-600">{cliente.telefone}</p>
                 </div>
                 <div className="flex space-x-3 mt-4 sm:mt-0">
                 <Link href={`/clientes/${cliente.id}`}>
